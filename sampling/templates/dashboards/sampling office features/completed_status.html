@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sampling Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'samplingofficedash_style.css' %}">
+</head>
+
+<body>
+    <header>
+        <div class="main-menu">
+            <img id="logo" src="{%static 'DON.png'%}" alt="Logo">
+            <h2>Sampling Office</h2>
+            <a style="width: 4em; text-decoration: none;" id="Logout" href="{% url 'stafflogout' %}"><button style="height: 100%; width: 100%; border: 0cm; border-radius: 5em; font-size: 17px; ">Logout</button></a>        </div>
+    </header>
+    <div class="content">
+        <div class="sidebar">
+            <div><a href="{% url 'sampling_office_dashboard' %}"><button class="sidebar-item"
+                        type="button">Dashboard</button></a></div>
+            <div><a href="{% url 'addnewitems' %}"><button class="sidebar-item" type="button">Add New
+                        Design</button></a></div>
+            <div><a href="{% url 'deleteitems' %}"><button class="sidebar-item" type="button">Delete Existing
+                        Design</button></a></div>
+            <div><a href="{% url 'showorders' %}"><button class="sidebar-item" type="button">Show Orders
+                    </button></a></div>
+            <div><a href="{% url 'completedorders' %}"><button class="sidebar-item" type="button">Completed Orders</button></a></div>
+
+        </div>
+        <div class="main">
+            <h4 class="welcome-message">Completed Orders</h4>
+            <table>
+                <thead>
+                    <tr class="tableheading">
+                        <th>Order No</th>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Brand</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Sample Type</th>
+                        <th>Selected Samples</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody style="background-color: rgb(238, 239, 239);">
+                    {% for ord in orders %}
+                        {%if ord.completestatus == True %}
+                    <tr class="item" value="row_{ord.orderno}">
+                        <td>{{ ord.orderno }}</td>
+                        <td>{{ ord.username }}</td>
+                        <td>{{ ord.name }}</td>
+                        <td>{{ ord.brand }}</td>
+                        <td>{{ ord.email }}</td>
+                        <td>{{ ord.phone }}</td>
+                        <td>{{ ord.sampletype }}</td>
+                        <td style="max-width: 6rem; overflow: hidden;">
+                            {{ ord.selected_samples}}
+                        </td>
+                        <td>
+                            <a href="{% url 'updatestatus' ord.orderno %}"><button>Detail</button></a>
+                        </td>
+                    </tr>
+                            {%endif%}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+
+    </script>
+</body>
+
+</html>

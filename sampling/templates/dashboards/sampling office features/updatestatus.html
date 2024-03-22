@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add items</title>
+    {% load static %}
+    <link rel="stylesheet" href="{%static 'sampling_office_features.css' %}" />
+  </head>
+
+  <body>
+    <header>
+      <div class="main-menu">
+        <img id="logo" src="{%static 'DON.png'%}" alt="Logo" />
+        <h2>Sampling Office</h2>
+        <a
+          style="width: 4em; text-decoration: none"
+          id="Logout"
+          href="{% url 'stafflogout' %}"
+          ><button
+            style="
+              height: 100%;
+              width: 100%;
+              border: 0cm;
+              border-radius: 5em;
+              font-size: 17px;
+            "
+          >
+            Logout
+          </button></a
+        >
+      </div>
+    </header>
+    <div class="content">
+      <div class="sidebar">
+        <div>
+          <a href="{% url 'sampling_office_dashboard' %}"
+            ><button class="sidebar-item" type="button">Dashboard</button></a
+          >
+        </div>
+        <div>
+          <a href="{% url 'addnewitems' %}"
+            ><button class="sidebar-item" type="button">
+              Add New Design
+            </button></a
+          >
+        </div>
+        <div>
+          <a href="{% url 'deleteitems' %}"
+            ><button class="sidebar-item" type="button">
+              Delete Existing Design
+            </button></a
+          >
+        </div>
+        <div>
+          <a href="{% url 'showorders' %}"
+            ><button class="sidebar-item" type="button">Show Orders</button></a
+          >
+        </div>
+        <div>
+          <a href="{% url 'completedorders' %}"
+            ><button class="sidebar-item" type="button">
+              Completed Orders
+            </button></a
+          >
+        </div>
+      </div>
+      <div class="main">
+        <form
+          class="login-form"
+          action="{% url 'updatestatus' orderno=orderno %}"
+          method="POST"
+        >
+          <h2>Update Status</h2>
+          <br /><br />
+          <h4>Order No: <span id="orderno">{{orderno}}</span></h4>
+          <h4>Username: {{username}}</h4>
+          <h4>Name: {{name}}</h4>
+          <h4>Brand: {{brand}}</h4>
+          <h4>Email: {{email}}</h4>
+          <h4>Phone: {{phone}}</h4>
+          <h4>Sample Type: {{sample_type}}</h4>
+          <h4>Selected Samples:</h4>
+          <ol>
+            {%for sample in selected_samples%}
+            <li>{{sample}}</li>
+            {%endfor%}
+          </ol>
+          {% comment %} <button
+          style="background-color: rgb(0, 255, 81)"
+          type="submit"
+          class="login-button"
+          >
+          Completed
+        </button> {% endcomment %}
+    </form>
+    <a href="{% url 'download_in_excel' orderno %}"><button>Download Order in Excel</button></a>
+        <a href="{% url 'showorders' %}"
+          ><button class="login-button">Go Back</button></a
+        >
+      </div>
+    </div>
+
+  </body>
+</html>

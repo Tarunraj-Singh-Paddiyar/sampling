@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'sampling_style.css' %}">
+</head>
+
+
+<body>
+    <img src="{%static 'DON.png'%}" alt="Company Logo" class="logo">
+    <div class="container">
+        <form method="POST" action="{% url 'staff_signin' %}">
+            <h2>Staff Login</h2>
+            <div>
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <label for="susername" class="form_label">Username:</label>
+            <input type="text" name="susername" id="susername">
+            <br>
+            <br>
+            <label for="spassword" class="form_label">Password:</label>
+            <input type="password" name="spassword" id="spassword">
+            <br>
+            <br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+    </div>
+</body>
+
+</html>

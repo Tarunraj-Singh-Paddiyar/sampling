@@ -1,0 +1,99 @@
+/* Reset default margin and padding */
+body,
+html {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* Set background image to cover the entire screen */
+body {
+    background-image: linear-gradient(rgb(0 0 0 / 70%), rgb(0 0 0 / 70%)), url(background.jpg);
+    /* Background image from static folder */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* Keep background fixed while scrolling */
+}
+
+.logo {
+    max-width: 200px;
+    /* Adjust max width as needed */
+    opacity: 1; /* Ensure logo is fully visible */
+    animation: slide-up 1s 0.5s forwards, fade-in 1s 1s forwards;
+    /* Apply slide-up and fade-in animations */
+    display: block;
+    margin: 3% auto; /* Center logo horizontally and add vertical margin */
+}
+
+/* Center content horizontally */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff; /* Pure white background */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgb(174 248 234); /* Box shadow for container */
+    text-align: center; /* Center text content */
+}
+
+.heading {
+    font-size: 3em; /* Adjust size as needed */
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #09005e;
+    /* White color */
+    text-shadow: 0 0 10px #ffffff; /* Black shadow */
+    margin: 2% auto; /* Center horizontally and add vertical margin */
+    font-size: 4rem;
+}
+.company-info,
+.sampling-process,
+.sample-selection,
+.order-form {
+    margin-bottom: 30px; /* Add space between sections */
+}
+
+.company-info h2,
+.sampling-process h2,
+.sample-selection h2,
+.order-form h2 {
+    color: #333; /* Section title color */
+    font-size: 1.5em; /* Section title font size */
+    margin-bottom: 10px; /* Add space below section title */
+}
+
+.sample-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    grid-gap: 20px; /* Gap between grid items */
+}
+
+.sample-item {
+    position: relative;
+}
+
+.sample-item img {
+    width: 100%; /* Ensure images fill their container */
+    border-radius: 10px; /* Rounded corners for images */
+}
+
+.sample-item input[type="checkbox"] {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.order-form form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.order-form label,
+.order-form input[type="submit"] {
+    margin-bottom: 10px; /* Add space between form fields */
+}

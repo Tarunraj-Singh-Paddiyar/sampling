@@ -1,0 +1,162 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header styles */
+header {
+    background-color: #1A0072;
+    /* Dark blue color */
+    color: #fff;
+    padding: 2rem;
+    
+}
+
+.main-menu {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+}
+
+/* Sidebar styles */
+.sidebar {
+    background-color: #1A0072;
+    /* Dark blue color */
+    color: #fff;
+    height: 100%;
+    /* Sidebar covers entire screen height */
+    padding: 1rem;
+    width: 15%;
+    /* Left sidebar width */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+
+}
+
+.sidebar-item {
+    background-color: #fff;
+    margin-bottom: 1rem;
+    color: #1A0072;
+    /* White text color */
+    cursor: pointer;
+    border-radius: 10px;
+    /* Rounded corners */
+    padding: 0.5rem 1rem;
+    margin-bottom: 3em;
+    margin-top: 1em;
+    width: 100%;
+    /* Padding for sidebar items */
+}
+
+.sidebar-item:hover {
+    box-shadow: 0 0 10px #fff;
+    /* Neon shadow on hover */
+}
+
+/* Main content styles */
+.main {
+    width: 75%;
+    background-color: #fff;
+    /* White background color */
+    padding: 2rem;
+    /* min-height: 100vh; */
+    /* Ensure content covers entire screen height */
+    /* display: flex; */
+    /* Use flexbox */
+    /* justify-content: space-between; */
+    /* Space items evenly */
+    justify-content: center;
+    margin: 1em auto;
+    /* Center items vertically */
+}
+
+.welcome-message {
+    background-color: #1A0072;
+    color: #fff;
+    width: 70%;
+    padding: 0.8em 1em;
+    border-radius: 5px;
+    height: 3em;
+    margin: 0 auto;
+}
+
+.content {
+    display: flex;
+}
+
+#Logout {
+    position: relative;
+    display: flex;
+    font-size: large;
+    background-color: #fff;
+    color: #1A0072;
+    height: 2em;
+    border-radius: 15px;
+    margin-left: auto;
+    cursor: pointer;
+}
+#Logout:hover{
+    box-shadow: 0 0 10px #fff;
+}
+
+.main-menu h2 {
+    position: relative;
+    display: flex;
+    margin-left: 35%;
+}
+#logo{
+    display: flex;
+    mask-repeat: no-repeat;
+    height: 50px;
+    padding: 0px;
+
+}
+.main {
+    /* Your existing styles */
+    text-align: center; /* Center align content */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Remove default table spacing */
+    margin-top: 2em; /* Add margin above the table */
+}
+
+th, td {
+    /* border: 1px solid #1A0072; Border color */
+    padding: 8px; /* Padding inside table cells */
+}
+
+th {
+    background-color: #1A0072; /* Header background color */
+    color: white; /* Header text color */
+}
+.item{
+    height: 3em;
+}
+
+.item:hover {
+    background-color: #1A0072; /* Header background color */
+    color: white; /* Header text color */
+    box-shadow: 0 0 10px #fff;
+    border: #fff solid 1px;
+}
+.updateinput{
+    width: 6em;
+    height: 2em;
+}
+.actions{
+    width: 5em;
+    border: #989898 2px solid;
+    border-radius: 6px;
+    height: 2em;
+}
+.actions:hover{
+    box-shadow: 0 0 10px #fff;
+    cursor: pointer;
+}
+.tableheading{
+    height: 3em;
+}
