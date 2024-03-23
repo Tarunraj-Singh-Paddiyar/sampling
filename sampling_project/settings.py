@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-import django_heroku
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +26,7 @@ SECRET_KEY = 'django-insecure-jx5)#3l#v*js37noo00)r69792bx1^lnqvbqqh9e1i*acts!p1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['tarunrajsinghpaddiyar.pythonanywhere.com']
 
 
 # Application definition
@@ -161,6 +159,3 @@ DATABASES = {
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Absolute path to the media directory
 MEDIA_URL = '/media/'  # URL prefix for media files
-
-
-django_heroku.settings(locals())
