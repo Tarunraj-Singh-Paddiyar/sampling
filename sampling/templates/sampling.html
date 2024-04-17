@@ -31,7 +31,7 @@
         <nav
           class="navbar navbar-expand-lg  blur border-radius-xl top-0 z-index-fixed shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
           <div class="container">
-            <a class="navbar-brand" href="http://127.0.0.1:8000/sampling/">
+            <a class="navbar-brand" href="{% url 'sampling' %}">
               <div class="logo-image">
                 <img src="{% static 'assets/img/DON.png' %}" class="responsive-logo">
               </div>
@@ -125,8 +125,8 @@
                     <a href="{% url 'designs' %}"><button type="button" class="btn w-auto me-10"
                       style="height: 50px; width: 150px; background-color: #ed3237; color: rgb(255, 255, 255);"
                       title="You will have to Login for this First" href="">Go to Designs</button></a>
-                    <a href="{% url 'signin' %}"></a><button type="button" class="btn w-auto"
-                      style="height: 50px; width: 150px; background-color: #0474bc; color: white;">Go to Login</button>
+                    <a href="{% url 'signin' %}"><button type="button" class="btn w-auto"
+                      style="height: 50px; width: 150px; background-color: #0474bc; color: white;">Go to Login</button></a>
                   </div>
                 </div>
               </div>

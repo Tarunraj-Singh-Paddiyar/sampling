@@ -36,7 +36,7 @@
                 <nav
                     class="navbar navbar-expand-lg  blur border-radius-xl top-0 z-index-fixed shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
                     <div class="container">
-                        <a class="navbar-brand" href="http://127.0.0.1:8000/sampling/">
+                        <a class="navbar-brand" href="{% url 'sampling' %}">
                             <div class="logo-image">
                                 <img src="{% static 'assets/img/DON.png' %}" class="responsive-logo">
                             </div>
@@ -66,7 +66,6 @@
                                                     in</a></li>
                                             <li><a class="dropdown-item border-radius-md" href="{% url 'signup' %}">Sign
                                                     Up</a></li>
-                                            <!-- <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li> -->
                                         </ul>
                                     </div>
                                 </div>
@@ -111,25 +110,25 @@
                                     <label class="form-label">Phone No.</label>
                                     <input type="number" class="form-control" id="phone" name="phone">
                                 </div>
-                                <div class="input-group input-group-outline my-3">
+                                <div class="input-group input-group-outline my-1">
                                     <label class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="username" name="username">
+                                    <input type="text" class="form-control" id="username" name="username"
+                                        oninput="checkavaliableuser()">
                                 </div>
-                                <div>
-                                    {% if messages %}
-                                        <div class="messages">
-                                            {% for message in messages %}
-                                            <p>{{ message }}</p>
-                                            {% endfor %}
-                                        </div>
-                                        {% endif %}
+                                <div class="input-group  my-1">
+                                    <p id="message" style="margin: 1em auto; font-size: 8px; color: #ed3237;"></p>
                                 </div>
+
                                 <div class="input-group input-group-outline mb-3">
                                     <label class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password">
+                                    <input type="password" class="form-control" id="password" name="password" oninput="checkpassword()">
+                                </div>
+                                <div class="input-group">
+                                    <p id="messagepassword" style="margin: 0 auto; font-size: 8px; color: #ed3237;">
+                                    </p>
                                 </div>
                                 <div class="text-center">
-                                    <button class="btn w-100 my-4 mb-2" type="submit"
+                                    <button class="btn w-100 my-4 mb-2" type="submit" disabled id="submitbutton"
                                         style="background-color:#ed3237; color: aliceblue;">Sign up</button>
                                 </div>
                                 <p class="mt-4 text-sm text-center">
@@ -146,25 +145,59 @@
         </div>
     </div>
     <script>
-        $(document).ready(function () {
-            $('#username').on('input', function () {
-                var username = $(this).val();
-                $.ajax({
-                    url: '/check_username_availability/',
-                    method: 'GET',
-                    data: {
-                        'username': username
-                    },
-                    success: function (response) {
-                        if (response.available) {
-                            $('#availabilityMessage').text('Username is available');
-                        } else {
-                            $('#availabilityMessage').text('Username is not available');
-                        }
+        const submitbutton = document.getElementById('submitbutton');
+        submitbutton.disabled = true;
+        function checkpassword() {
+            const password = document.getElementById('password');
+            const messagepassword = document.getElementById('messagepassword');
+            if ((password.value).indexOf(" ") != -1) {
+                messagepassword.textContent = "The Password has Blank Spaces";
+                messagepassword.style.color = "#ed3237";
+                const submitbutton = document.getElementById('submitbutton');
+                submitbutton.disabled = true;
+            }
+            else if ((password.value).length <=8) {
+                messagepassword.textContent = "The length of Password should be atleast 8";
+                messagepassword.style.color = "#ed3237";
+                const submitbutton = document.getElementById('submitbutton');
+                submitbutton.disabled = true;
+            }
+            else {
+                messagepassword.textContent = "";
+                messagepassword.style.color = "#00FF00";
+                const submitbutton = document.getElementById('submitbutton');
+                submitbutton.disabled = false;
+            }
+        }
+
+        function checkavaliableuser() {
+            const username = document.getElementById('username');
+            fetch('check_username_availability', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: (username.value) })
+            }).then(response => response.json())
+                .then(data => {
+                    const message = document.getElementById('message');
+                    // console.log(data.available)
+                    if (data.available == -1) {
+                        message.textContent = "The length of the username and password should be more than 8 words";
+                        message.style.color = "#ed3237";
+                        const submitbutton = document.getElementById('submitbutton');
+                        submitbutton.disabled = true;
+                    } else if (data.available == 0) {
+                        message.textContent = "This username is not avaliable";
+                        message.style.color = "#ed3237";
+                        const submitbutton = document.getElementById('submitbutton');
+                        submitbutton.disabled = true;
+                    } else {
+                        message.textContent = "This username is  avaliable";
+                        message.style.color = "#00FF00";
+                        const submitbutton = document.getElementById('submitbutton');
+                        submitbutton.disabled = false;
                     }
                 });
-            });
-        });
+        }
     </script>
 </body>
 

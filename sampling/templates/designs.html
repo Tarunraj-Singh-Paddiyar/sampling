@@ -16,11 +16,6 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- Material Kit CSS -->
   <link href="{% static 'assets/css/material-kit.css'%}" rel="stylesheet" />
-  <style>
-    #background-image {
-      background-image: url('{% static "assets/img/Designs.jpg"%}')
-    }
-  </style>
 </head>
 
 <body>
@@ -31,7 +26,7 @@
         <nav
           class="navbar navbar-expand-lg  blur border-radius-xl top-0 z-index-fixed shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
           <div class="container">
-            <a class="navbar-brand" href="http://127.0.0.1:8000/sampling/">
+            <a class="navbar-brand" href="{% url 'sampling' %}">
               <div class="logo-image">
                 <img src="{% static 'assets/img/DON.png' %}" class="responsive-logo">
               </div>
@@ -49,6 +44,15 @@
               <ul class="navbar-nav navbar-nav-hover ms-auto">
 
                 <li class="nav-item my-auto ms-3 ms-lg-0">
+                  <a href="{% url 'customerdashboard' %}" class="btn btn-sm  mb-0 me-1 mt-2 mt-md-0"
+                    style="background-color: #0474bc; color: aliceblue;" onclick="updateSelectedSamplesinSession()">My
+                    Orders</a>
+                  <a href="{% url 'mycart' %}" class="btn btn-sm  mb-0 me-1 mt-2 mt-md-0"
+                    style="background-color: #0474bc; color: aliceblue;" onclick="updateSelectedSamplesinSession()">My
+                    Cart</a>
+                  <a href="{% url 'sampling_order' %}" onclick="emptycheck()" onclick="updateSelectedSamplesinSession()"
+                    class="btn btn-sm  mb-0 me-1 mt-2 mt-md-0"
+                    style="background-color: #0474bc; color: aliceblue;">Order Page</a>
                   <a href="{% url 'customerlogout' %}" class="btn btn-sm  mb-0 me-1 mt-2 mt-md-0"
                     style="background-color: #ef1919; color: aliceblue;">Sign
                     out</a>
@@ -63,43 +67,25 @@
   </div>
   <!-- End Navbar -->
 
-
-  <div class="page-header min-vh-80" id="background-image">
-    <span class="mask bg-gradient-dark opacity-1"></span>
-  </div>
-
   <section class="my-5 py-5">
     <div class="container">
-        <div class="row">
-            <div class="row justify-content-center text-center my-sm-5">
-                <div class="col-lg-6">
-                    <h2 class="text-dark mb-0">All Designs:-</h2>
-                    <br><br>
-                </div>
-            </div>
+      <div class="row">
+        <div class="row justify-content-center text-center my-sm-5">
+          <div class="col-lg-6">
+            <h2 class="text-dark mb-0">All Designs:-</h2>
+            <br><br>
+          </div>
         </div>
+      </div>
     </div>
-</section>
+  </section>
 
   <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
     <div class="container">
       <div class="section text-center pt-6">
-        <section class="pb-8">
-          <div class="container">
-              <section class="mt-3" style=" border-radius: 1em;">
-                  <div class="container">
-                      <div class="row justify-content-between text-center py-2">
-                          <div class="col-12 mx-auto">
-                              <a href="{% url 'mycart' %}"><button type="button"
-                                  class="btn w-auto"
-                                  style="height: 50px; width: 150px; background-color: #0474bc; color: white;">Go to Cart
-                                  </button></a>
-                          </div>
-                      </div>
-                  </div>
-              </section>
-          </div>
-      </section>
+
+        <!-- All Designs  -->
+
         <section class="pt-3 pb-4">
           <div class="container">
             <div class="row">
@@ -121,64 +107,178 @@
                       </label>
                       <div class="card-body">
                         <h3 class="card-text">{{design.name}}</h3>
-                        <p class="card-text">{{design.description}}</p>
-                        <button type="button" class="btn" style="background-color: #ef1919; color: aliceblue;"
+                        <button type="button" class="btn mb-1" style="background-color: #ef1919; color: aliceblue;"
                           onclick='showinbig("{{design.name}}")'>View</button>
+                        <br>
+                        <div class="row" id="hiddenarea">
+                          <div class="col" style="display: none; justify-content: space-between;
+                          gap: 30px; align-items: center; margin: 1em auto;">
+                            <div class="input-group input-group-outline mb-1">
+                              <label class="form-label">Length</label>
+                              <input class="form-control" id="lengthinput"
+                                oninput="changevalue('{{design.name}}','length')" type="text">
+                            </div>
+                            <div class="input-group input-group-outline mb-1">
+                              <label class="form-label">Width</label>
+                              <input class="form-control" id="widthinput"
+                                oninput="changevalue('{{design.name}}','width')" type="text">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="Buttonforbulkdiv" style="display: none;">
+                          <button class="btn" id="buttonforbulk" onclick="directbulkorder('{{design.name}}')"
+                            style="margin-top: 1em ; background-color: #ef1919; color: aliceblue;" type="button">Book
+                            for Bulk</button>
+                        </div>
                       </div>
                     </div>
                     <hr class="vertical dark">
                   </div>
                   {%endfor%}
-
                 </div>
               </div>
             </div>
           </div>
         </section>
       </div>
-      <form id="designsForm" action="{% url 'designs' %}" method="POST"
-        style="display: block; width: 100%; margin: 2em;">
+
+      <!-- form -->
+      <form id="sampleform" action="{% url 'designs' %}" method="POST">
         <input type="hidden" id="selectedSamplesInput" name="selectedSamples" value="">
-        <button style="display: flex; margin: 0 auto; justify-content: center;" type="submit"
-          class="btn btn-danger">Submit Order</button>
+        <input type="hidden" id="order_type" name="order_type" value="Sample">
+        <input type="hidden" id="bulkOrder" name="bulk_order" value="">
       </form>
+
+      <div style="display: block; width: 100%; margin: 2em;">
+        <div class="d-flex justify-content-around">
+          <button class="btn" style="background-color: #ef1919; color: aliceblue;" onclick="emptycheck()">Submit
+            Sampling Order</button>
+        </div>
+      </div>
+
+      <!-- Direct Bulk Order -->
+      <form id="directbulkorder" action="{% url 'directbulkorder' %}" method="POST" style="display: none;">
+        <input type="hidden" id="bulkselecteddesign" name="bulkselecteddesign" value="">
+        <input type="hidden" id="bulklength" name="bulklength" value="">
+        <input type="hidden" id="bulkwidth" name="bulkwidth" value="">
+      </form>
+
     </div>
   </div>
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+
+  <!-- Empty Check Modal For Bulk -->
+  <div class="modal fade" id="emptycheckmodalforbulk" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <h5 class="modal-title" id="exampleModalLabel">Error!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          ...
+          You may not have entered length or width or both. Kindly check and submit the order again.
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn bg-gradient-danger" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
-  <div class="modal fade" id="designModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+
+
+  <!-- Empty Check Modal -->
+  <div class="modal fade" id="emptycheckmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title" id="exampleModalLabel">Error!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
         <div class="modal-body">
-          <img src="" id="designImage" class="img-fluid" alt="">
-          <p id="designDescription"></p>
+          You may not have selected any samples. Kindly refresh and fill the form again.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn bg-gradient-danger" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
+
+  <!--Design Modal -->
+  <div class="modal fade" id="designModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content h-100">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            style="background-color: #ef1919; color: aliceblue;"></button>
+        </div>
+        <div class="modal-body d-flex flex-row  h-100">
+          <div class="col-md-6 p-0" style="padding: 2em;">
+            <img style="height: 25em; border: 1px rgb(101, 98, 98) solid;" src="" id="designImage" class="img-fluid"
+              alt="">
+          </div>
+          <div class="col-md-6 overflow-auto" id="Description" style="margin-left: 1em;">
+            <h5 id="modal-title"> </h5>
+            <h6 id="shade_color"> </h6>
+            <h6 id="width"> </h6>
+            <h6 id="fabrictype"> </h6>
+            <h6 id="GSM"> </h6>
+            <h6 id="pick"> </h6>
+            <h6 id="weave"> </h6>
+            <h6 id="finish"> </h6>
+            <p id="designDescription"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Single Bulk Modal -->
+  <div class="modal fade" id="BulkOrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to book the following design for Bulk
+            Order?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-flex flex-row  h-100">
+          <div class="col-md-6 p-0" style="padding: 2em;">
+            <img style="height: 25em; border: 1px rgb(101, 98, 98) solid;" src="" id="designImage" class="img-fluid"
+              alt="">
+          </div>
+          <div class="col-md-6 overflow-auto" id="Description" style="margin-left: 1em;">
+            <h5 id="order-title"> </h5>
+            <h5 id="order-length"> </h5>
+            <h5 id="order-width"> </h5>
+            <br>
+            <h5> Details:- </h5>
+            <h6 id="shade_color"> </h6>
+            <h6 id="width"> </h6>
+            <h6 id="fabrictype"> </h6>
+            <h6 id="GSM"> </h6>
+            <h6 id="pick"> </h6>
+            <h6 id="weave"> </h6>
+            <h6 id="finish"> </h6>
+            <p id="designDescription"></p>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn bg-gradient-primary mb-0" onclick="confirmbulkorder()">Bulk Order</button>
+          <button type="button" class="btn bg-gradient-dark mb-0" data-bs-dismiss="modal"
+            onclick="cancelbulkorder()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer  -->
   <footer class="footer pt-5 mt-5">
     <div class="container">
       <div class=" row">
@@ -189,36 +289,6 @@
                 style="height: 15px; width: 150000px;">
             </a>
             <h6 class="font-weight-bolder mb-4">Donear Industries Pvt. Ltd.</h6>
-          </div>
-          <div>
-            <ul class="d-flex flex-row ms-n3 nav">
-              <li class="nav-item">
-                <a class="nav-link pe-1" href="https://www.facebook.com/CreativeTim/" target="_blank">
-                  <i class="fab fa-facebook text-lg opacity-8"></i>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link pe-1" href="https://twitter.com/creativetim" target="_blank">
-                  <i class="fab fa-twitter text-lg opacity-8"></i>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link pe-1" href="https://dribbble.com/creativetim" target="_blank">
-                  <i class="fab fa-dribbble text-lg opacity-8"></i>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link pe-1" href="https://github.com/creativetimofficial" target="_blank">
-                  <i class="fab fa-github text-lg opacity-8"></i>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link pe-1" href="https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w"
-                  target="_blank">
-                  <i class="fab fa-youtube text-lg opacity-8"></i>
-                </a>
-              </li>
-            </ul>
           </div>
         </div>
         <div class="col-md-2 col-sm-6 col-6 mb-4">
@@ -238,17 +308,58 @@
             </ul>
           </div>
         </div>
-        
+
       </div>
     </div>
   </footer>
   <script>
-    var checkboxes = document.querySelectorAll(
-      'input[type="checkbox"]'
-    );
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
     var selectedSamplesInput = document.getElementById("selectedSamplesInput");
 
-    // Function to update the value of the hidden input field
+    window.addEventListener('pageshow', function () {
+      loadSelectedSamplesFromSession();
+      updateSelectedSamples();
+    })
+    window.addEventListener('loadcontent', function () {
+      loadSelectedSamplesFromSession();
+      updateSelectedSamples();
+    })
+
+    window.onpopstate = function (event) {
+      // Redirect to desired URL on back button click
+      window.location.href = "http://127.0.0.1:8000/sampling/";
+    };
+
+    function loadSelectedSamplesFromSession() {
+      fetch('get_selected_samples')
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          try {
+            selected_samples = data.selected_samples;
+            // console.log(selected_samples)
+          } catch {
+            selected_samples = 0;
+          }
+          if (selected_samples) {
+            if (typeof (selected_samples) == "string") {
+              selected_samples = selected_samples.split(",")
+            }
+            // console.log(typeof (selected_samples))
+            // console.log(selected_samples);
+            selectedSamplesInput.value = selected_samples;
+            // console.log(selectedSamplesInput.value);
+            checkboxes.forEach(function (checkbox) {
+              if (selected_samples.includes(checkbox.value)) {
+                checkbox.checked = true;
+                // console.log(checkbox);
+              }
+            });
+          }
+        })
+    }
+
     function updateSelectedSamples() {
       var selectedSamples = [];
       checkboxes.forEach(function (checkbox) {
@@ -259,11 +370,31 @@
       selectedSamplesInput.value = selectedSamples.join(",");
     }
 
+    function updateSelectedSamplesinSession() {
+      const selected_samples = document.getElementById("selectedSamplesInput").value;
+      // console.log("Before Fetch Update", selected_samples);
+      fetch('get_selected_samples', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ selected_samples: selected_samples })
+      }).then(response => response.json())
+        .then(data => {
+          // console.log(selected_samples)
+          // console.log("The session is stored")
+        })
+
+    }
+
     checkboxes.forEach(function (checkbox) {
       checkbox.addEventListener("change", function () {
+        if (checkbox.checked) {
+          showhidden(event);
+        }
         updateSelectedSamples();
+        updateSelectedSamplesinSession();
       });
     });
+
     function selectImagecheckbox(event) {
       const clickedElement = event.target;
       // console.log(clickedElement.tagName)
@@ -276,10 +407,13 @@
           checkbox.checked = !checkbox.checked;
           // console.log(checkbox.value)
         }
+        if (checkbox.checked) {
+          showhidden(event);
+        }
       }
       updateSelectedSamples();
+      updateSelectedSamplesinSession();
     }
-    updateSelectedSamples();
 
     function showinbig(designName) {
       // Fetch design details using AJAX
@@ -292,7 +426,10 @@
         })
         .then(data => {
           const modalTitle = document.querySelector('#designModal .modal-title');
-          modalTitle.textContent = data.Name;
+          modalTitle.textContent = " Design ID: " + data.Name;
+
+          const modalDescriptionTitle = document.querySelector('#Description #modal-title');
+          modalDescriptionTitle.textContent = data.Name;
 
           const designImage = document.querySelector('#designModal #designImage');
           designImage.src = data.image_url;
@@ -300,6 +437,27 @@
 
           const designDescription = document.querySelector('#designModal #designDescription');
           designDescription.textContent = data.description;
+
+          const shade_color = document.querySelector('#designModal #shade_color');
+          shade_color.textContent = " Shade/Colour: " + data.shade_color;
+
+          const width = document.querySelector('#designModal #width');
+          width.textContent = " Width: " + data.width;
+
+          const fabrictype = document.querySelector('#designModal #fabrictype');
+          fabrictype.textContent = " Fabric Type: " + data.fabric_type;
+
+          const GSM = document.querySelector('#designModal #GSM');
+          GSM.textContent = " GSM: " + data.GSM_;
+
+          const pick = document.querySelector('#designModal #pick');
+          pick.textContent = " Pick: " + data.pick;
+
+          const weave = document.querySelector('#designModal #weave');
+          weave.textContent = " Weave: " + data.weave;
+
+          const finish = document.querySelector('#designModal #finish');
+          finish.textContent = " Finish: " + data.finish;
 
           // Show the modal
           const designModal = new bootstrap.Modal(document.getElementById('designModal'));
@@ -311,8 +469,158 @@
         });
     }
 
+    function buttonpressed(buttonname) {
+      const buttonpress = document.getElementById('order_type');
+      buttonpress.value = buttonname;
+      // console.log(buttonname);
+    }
+
+    function showhidden(event) {
+      const element = event.target;
+      const divsection = element.closest('.card');
+      const columns = divsection.querySelectorAll('.col');
+      const buttonforbulk = divsection.querySelector('.Buttonforbulkdiv');
+      buttonforbulk.style.display = "inline";
+      columns.forEach(function (column) {
+        column.style.display = "flex";
+        column.style.width = "5em";
+      })
+    }
+
+    let selectedBulkOrders = {};
+    let selectedBulkOrdersArray = [];
+    function changevalue(designName, section) {
+      const selectedSamples = selectedSamplesInput.value.split(',');
+      if (selectedSamples.includes(designName)) {
+        // console.log("Yes, It is!");
+        const inputfield = event.target.value;
+        // console.log(inputfield);
+        for (let key in selectedBulkOrders) {
+          selectedBulkOrdersArray.push(key);
+        }
+        // console.log("selectedBulkOrderArray: ", selectedBulkOrdersArray);
+        if (selectedBulkOrdersArray.includes(designName)) {
+          selectedBulkOrders[designName][section] = inputfield;
+        }
+        else {
+          selectedBulkOrders[designName] = { 'length': 0, 'width': 0 };
+          selectedBulkOrders[designName][section] = inputfield;
+        }
+      }
+      // console.log(selectedBulkOrders);
+      let bulkOrder = document.getElementById('bulkOrder');
+      let selectedBulkOrdersJSON = '';
+      selectedBulkOrdersJSON = JSON.stringify(selectedBulkOrders);
+      bulkOrder.value = selectedBulkOrdersJSON;
+      // console.log("selectedBulkOrdersJSON:", selectedBulkOrdersJSON);
+      // console.log("selectedBulkOrders",selectedBulkOrdersJSON);
+      // console.log("bulkOrders.value",bulkOrder.value);
+    }
+
+    function directbulkorder(designName) {
+      const buttonpressed = event.target;
+      const card = buttonpressed.closest('.card');
+      const length = card.querySelector('#lengthinput');
+      const width = card.querySelector('#widthinput');
+
+      if(length.value && width.value){
+      const bulk_order_form = document.getElementById('directbulkorder');
+      const bulkselecteddesign = bulk_order_form.querySelector('#bulkselecteddesign');
+      const bulk_length = bulk_order_form.querySelector('#bulklength');
+      const bulk_width = bulk_order_form.querySelector('#bulkwidth');
+
+      bulk_length.value = length.value;
+      bulk_width.value = width.value;
+      bulkselecteddesign.value = designName;
+
+
+      // console.log(bulk_length.value);
+      // console.log(bulk_width.value);
+
+      fetch(`/get_design_details/${designName}`)
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          const modal = document.querySelector('#BulkOrderModal');
+
+          const orderTitle = modal.querySelector('#order-title');
+          orderTitle.textContent = " Design ID: " + designName;
+
+          const orderlength = modal.querySelector('#order-length');
+          orderlength.textContent = " Order Length: " + bulk_length.value;
+
+          const orderwidth = modal.querySelector('#order-width');
+          orderwidth.textContent = " Order Width: " + bulk_width.value;
+
+          const designImage = modal.querySelector('#designImage');
+          designImage.src = data.image_url;
+          designImage.alt = data.Name;
+
+          const shade_color = modal.querySelector('#shade_color');
+          shade_color.textContent = " Shade/Colour: " + data.shade_color;
+
+          const width = modal.querySelector('#width');
+          width.textContent = " Width: " + data.width;
+
+          const fabrictype = modal.querySelector('#fabrictype');
+          fabrictype.textContent = " Fabric Type: " + data.fabric_type;
+
+          const GSM = modal.querySelector('#GSM');
+          GSM.textContent = " GSM: " + data.GSM_;
+
+          const pick = modal.querySelector('#pick');
+          pick.textContent = " Pick: " + data.pick;
+
+          const weave = modal.querySelector('#weave');
+          weave.textContent = " Weave: " + data.weave;
+
+          const finish = modal.querySelector('#finish');
+          finish.textContent = " Finish: " + data.finish;
+
+          // Show the modal
+          const BulkModal = new bootstrap.Modal(document.getElementById('BulkOrderModal'));
+          BulkModal.show();
+          
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+      }else{
+        const emptycheckmodalforbulk = new bootstrap.Modal(document.getElementById('emptycheckmodalforbulk'));
+        emptycheckmodalforbulk.show();
+        
+      }
+
+    }
+
+    function confirmbulkorder() {
+      const bulkorderform = document.getElementById('directbulkorder');
+      bulkorderform.submit();
+    }
+
+    function cancelbulkorder() {
+      const bulk_order_form = document.getElementById('directbulkorder');
+      const bulk_length = bulk_order_form.querySelector('bulklength');
+      const bulk_width = bulk_order_form.querySelector('bulkwidth');
+      bulk_length.value = '';
+      bulk_width.value = '';
+    }
+
+    function emptycheck() {
+      if (selectedSamplesInput.value.length == 0) {
+        // console.log(selectedSamplesInput.value.length)
+        const emptycheckmodal = new bootstrap.Modal(document.getElementById('emptycheckmodal'));
+        emptycheckmodal.show();
+      }
+      else {
+        const sampleform = document.getElementById('sampleform');
+        sampleform.submit();
+      }
+    }
   </script>
 </body>
+
 <!--   Core JS Files   -->
 <script src="{% static 'assets/js/core/popper.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'assets/js/core/bootstrap.min.js' %}" type="text/javascript"></script>

@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
-from .views import success, signup, signin, staff_signin, deleteitems, updatestock, showorders, addnewitems,updatestatus,completedorders, customerlogout, stafflogout, customerdashboard, download_in_excel, mycart, orderpage
-
-
+from .views import success, signup, signin, staff_signin, deleteitems, updatestock, showorders, addnewitems,updatestatus,completedorders, customerlogout, stafflogout, customerdashboard, download_in_excel, mycart, sampling_order, directbulkorder, get_selected_samples
 urlpatterns = [
         path('', views.sampling, name='sampling'),
         path('sampling', views.sampling, name='sampling'),
@@ -25,6 +23,8 @@ urlpatterns = [
         path('customerdashboard/', views.customerdashboard, name='customerdashboard'),
         path('download/<int:orderno>/', views.download_in_excel, name='download_in_excel'),
         path('mycart', views.mycart, name='mycart'),
-        path('orderpage', views.orderpage, name='orderpage'),
+        path('sampling_order', views.sampling_order, name='sampling_order'),
+        path('directbulkorder', views.directbulkorder, name='directbulkorder'),
+        path('get_selected_samples', views.get_selected_samples, name='get_selected_samples'),
         path('get_design_details/<str:design_name>/', views.get_design_details, name='get_design_details'),
     ]

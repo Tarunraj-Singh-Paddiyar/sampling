@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jx5)#3l#v*js37noo00)r69792bx1^lnqvbqqh9e1i*acts!p1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['tarunrajsinghpaddiyar.pythonanywhere.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -121,20 +121,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+    ]
 
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-STATIC_ROOT = BASE_DIR / 'productionfiles'
-
-STATIC_URL = 'static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
 
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_COOKIE_PATH = '/'
@@ -149,11 +143,12 @@ EMAIL_HOST_PASSWORD = 'Test@4sampling'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',  # Use the 'mssql' engine from mssql-django
-        'NAME': 'SAMPLING_PROJECT',
-        'HOST': 'TARUNRAJ-PC\SQLEXPRESS',  # Server name or IP address
-        'PORT': '1433',  # Default port for MSSQL (optional)
-        'OPTIONS': {'driver': 'ODBC Driver 17 for SQL Server'},  # Adjust if needed
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Sampling_Project',
+        'USER': 'root',
+        'PASSWORD': 'Paddiyar@2002',
+        'HOST': 'localhost',  # Replace with your MySQL host if different
+        'PORT': '3306',  # Default MySQL port
     }
 }
 
